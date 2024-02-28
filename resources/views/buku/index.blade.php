@@ -85,9 +85,9 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($data as $d)
+                        @foreach ($data->data as $d)
                             <tr>
-                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $data->from++ }}</td>
                                 <td>{{ $d->judul }}</td>
                                 <td>{{ $d->pengarang }}</td>
                                 <td>{{ date('d/m/Y', strtotime($d->tanggal_publikasi)) }}</td>
@@ -105,7 +105,16 @@
                         @endforeach
                     </tbody>
                 </table>
-
+                @if ($data->links)
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination">
+                            @foreach ($data->links as $link)
+                                <li class="page-item"><a class="page-link {{ $link->active ? 'active' : '' }}"
+                                        href="{{ $link->url2 }}">{!! $link->label !!}</a></li>
+                            @endforeach
+                        </ul>
+                    </nav>
+                @endif
             </div>
             <!-- AKHIR DATA -->
         @endif

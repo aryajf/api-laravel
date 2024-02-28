@@ -11,14 +11,21 @@ class BukuController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $current_url = url()->current();
         $client = new Client();
         $url = env('API_URL').'/buku';
+        if($request->input('page') !== ''){
+            $url .= '?page='.$request->input('page');
+        }
         $response = $client->get($url);
         $content = $response->getBody()->getContents();
         $contentObj = json_decode($content, false);
         $data = $contentObj->data;
+        foreach ($data->links as $key => $value) {
+            $data->links[$key]->url2 = str_replace(env('API_URL'), env('BASE_URL'), $value->url);
+        }
         return view('buku.index', compact('data'));
     }
 
